@@ -86,8 +86,7 @@ func main() {
 
 	mux.HandleFunc("/expressions", resultHandler)
 	mux.HandleFunc("/", calculateHandler)
-	http.ListenAndServe(":8080", mux)
-
-	Log.Info("ListenAndServe", zap.String("port", "8080"))
 	fmt.Println("Server is running on http://localhost:8080	")
+	Log.Info("ListenAndServe", zap.String("port", "8080"))
+	http.ListenAndServe(":8080", mux)
 }
