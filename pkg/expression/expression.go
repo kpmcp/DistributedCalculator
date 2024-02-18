@@ -3,12 +3,12 @@ package expression
 import (
 	"DistributedCalculator/pkg/ExpParser"
 	"fmt"
+	"math/rand"
 
-	"github.com/google/uuid"
 )
 
 type Expression struct {
-	Name   string // Изначальное значение выражения
+	Name   string // Значение выражения
 	Status int    // Статус выражения
 	Id     int
 	Result float64     // результат выражения
@@ -16,7 +16,7 @@ type Expression struct {
 }
 
 func NewExpression(Name string) *Expression {
-	return &Expression{Name: Name, Status: 2, Id: int(uuid.New().ID())}
+	return &Expression{Name: Name, Status: 2, Id: rand.Intn(1000)}
 }
 
 func (exp *Expression) ForTemplate() string {
