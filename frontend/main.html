@@ -22,8 +22,8 @@
     </nav>
     
     <div class="container mt-3">
-        <input type="text" id="expression" class="input-field" placeholder="Enter expression...">
-        <button type="button" class="btn btn-primary mt-2" onclick="calculateExpression()">Calculate</button>
+        <input type="text" id="expression" class="input-field" placeholder="Введите выражение...">
+        <button type="button" class="btn btn-primary mt-2" onclick="calculateExpression()">Посчитать</button>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -33,7 +33,6 @@
     <script>
         function calculateExpression() {
             const expression = document.getElementById('expression').value;
-            // Отправляем выражение на сервер
             fetch('/calculate', {
                 method: 'POST',
                 headers: {
@@ -43,8 +42,7 @@
             })
             .then(response => response.json())
             .then(data => {
-                console.log(data); // Выводим результат вычислений в консоль
-                // Дополнительные действия с результатом (например, вывод на страницу)
+                console.log(data);
             })
             .catch(error => console.error('Error:', error));
         }

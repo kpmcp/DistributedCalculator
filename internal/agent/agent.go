@@ -1,41 +1,30 @@
 package agent
 
 import (
-	"disCom/internal/database"
-	"disCom/internal/env"
-	"disCom/internal/expression"
-	"disCom/internal/worker"
+	"DistributedCalculator/internal/worker"
+	"DistributedCalculator/pkg/database"
+	"DistributedCalculator/pkg/env"
+	"DistributedCalculator/pkg/expression"
 	"errors"
-	"fmt"
+
+	"go.uber.org/zap"
 )
 
 type Agent struct {
-	ind    int
 	Tasks  []chan expression.Expression
 	IsFree []bool
 	Work   []expression.Expression
 }
 
-func (ag *Agent) GetAll() []string { // Инфа для страницы /computers
-	all := make([]string, 0)
-	for ind, i := range ag.IsFree {
-		if i {
-			all = append(all, fmt.Sprintf("Воркер %d не работает", ind))
-		} else {
-			all = append(all, fmt.Sprintf("Воркер %d работает над выражением: %s, id: %d", ind, ag.Work[ind].Name, ag.Work[ind].Id))
-		}
-	}
-	return all
-}
 
-func NewAgent() *Agent {
+func NewAgent(logger *zap.Logger) *Agent {
 	tasks := make([]chan expression.Expression, 0)
 	IsFree := make([]bool, 0)
 	Work := make([]expression.Expression, 0)
 	for i := 0; i < env.Workers; i++ {
 		tasks = append(tasks, make(chan expression.Expression))
 
-		worker.StartWorker(tasks[i])
+		worker.StartWorker(tasks[i], logger)
 		IsFree = append(IsFree, true)
 		Work = append(Work, expression.Expression{})
 
@@ -43,7 +32,7 @@ func NewAgent() *Agent {
 	return &Agent{Tasks: tasks, IsFree: IsFree, Work: Work}
 }
 
-func (ag *Agent) AddTask(expr expression.Expression) error { // Создание задания
+func (ag *Agent) AddTask(expr expression.Expression) error {
 	for ind, i := range ag.IsFree {
 		if i {
 			ag.Tasks[ind] <- expr
@@ -61,5 +50,5 @@ func (ag *Agent) AddTask(expr expression.Expression) error { // Создание
 			return nil
 		}
 	}
-	return errors.New("Все работают")
+	return errors.New("")
 }

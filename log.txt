@@ -1,0 +1,18 @@
+{"level":"info","ts":"2024-02-18T13:41:22.200+0300","caller":"orchestrator/orchestrator.go:91","msg":"ListenAndServe","port":"8081"}
+{"level":"info","ts":"2024-02-18T13:41:22.223+0300","caller":"DistributedCalc/main.go:87","msg":"ListenAndServe","port":"8080"}
+{"level":"info","ts":"2024-02-18T13:41:34.835+0300","caller":"DistributedCalc/main.go:30","msg":"HTTP request","method":"GET","path":"/"}
+{"level":"info","ts":"2024-02-18T13:41:35.035+0300","caller":"DistributedCalc/main.go:30","msg":"HTTP request","method":"GET","path":"/favicon.ico"}
+{"level":"info","ts":"2024-02-18T13:41:37.500+0300","caller":"DistributedCalc/main.go:30","msg":"HTTP request","method":"GET","path":"/"}
+{"level":"info","ts":"2024-02-18T13:41:37.584+0300","caller":"DistributedCalc/main.go:30","msg":"HTTP request","method":"GET","path":"/favicon.ico"}
+{"level":"info","ts":"2024-02-18T13:41:53.099+0300","caller":"DistributedCalc/main.go:40","msg":"HTTP request","method":"POST","path":"/calculate"}
+{"level":"info","ts":"2024-02-18T13:41:54.534+0300","caller":"DistributedCalc/main.go:61","msg":"HTTP request","method":"GET","path":"/expressions"}
+{"level":"info","ts":"2024-02-18T13:41:54.622+0300","caller":"DistributedCalc/main.go:30","msg":"HTTP request","method":"GET","path":"/favicon.ico"}
+{"level":"info","ts":"2024-02-18T13:42:13.383+0300","caller":"DistributedCalc/main.go:61","msg":"HTTP request","method":"GET","path":"/expressions"}
+{"level":"info","ts":"2024-02-18T13:42:13.469+0300","caller":"DistributedCalc/main.go:30","msg":"HTTP request","method":"GET","path":"/favicon.ico"}
+{"level":"info","ts":"2024-02-18T13:42:21.569+0300","caller":"DistributedCalc/main.go:30","msg":"HTTP request","method":"GET","path":"/"}
+{"level":"info","ts":"2024-02-18T13:42:21.663+0300","caller":"DistributedCalc/main.go:30","msg":"HTTP request","method":"GET","path":"/favicon.ico"}
+{"level":"info","ts":"2024-02-18T13:42:28.633+0300","caller":"DistributedCalc/main.go:40","msg":"HTTP request","method":"POST","path":"/calculate"}
+{"level":"info","ts":"2024-02-18T13:42:29.588+0300","caller":"DistributedCalc/main.go:61","msg":"HTTP request","method":"GET","path":"/expressions"}
+{"level":"info","ts":"2024-02-18T13:42:29.669+0300","caller":"DistributedCalc/main.go:30","msg":"HTTP request","method":"GET","path":"/favicon.ico"}
+{"level":"info","ts":"2024-02-18T13:42:45.876+0300","caller":"DistributedCalc/main.go:61","msg":"HTTP request","method":"GET","path":"/expressions"}
+{"level":"info","ts":"2024-02-18T13:42:45.971+0300","caller":"DistributedCalc/main.go:30","msg":"HTTP request","method":"GET","path":"/favicon.ico"}

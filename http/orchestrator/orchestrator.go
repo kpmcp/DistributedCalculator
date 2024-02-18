@@ -3,14 +3,15 @@ package orchestrator
 //Здесь лежит и агент и оркестратор
 
 import (
-	"disCom/internal/agent"
-	"disCom/internal/expression"
+	"DistributedCalculator/internal/agent"
+	"DistributedCalculator/pkg/expression"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 	"sync"
 	"time"
+
+	"go.uber.org/zap"
 )
 
 var (
@@ -58,7 +59,6 @@ func check() {
 				time.Sleep(100 * time.Millisecond)
 				expr := GetFromWaiting()
 				err := Agent.AddTask(expr)
-				//fmt.Println(err)
 				if err != nil {
 					AddtoWaiting(expr)
 				}
@@ -78,11 +78,8 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func GetInfo() []string {
-	return Agent.GetAll()
-}
 
-func StartServer() { //запускает горутину с оркестратором
+func StartServer(logger *zap.Logger) { //запускает горутину с оркестратором
 	Waiting = make([]expression.Expression, 0)
 	check()
 	go func() {
@@ -90,7 +87,6 @@ func StartServer() { //запускает горутину с оркестрат
 		mux1.HandleFunc("/", mainHandler)
 		http.ListenAndServe(":8081", mux1)
 	}()
-	Agent = *agent.NewAgent()
-	fmt.Println("Orchestrator is running on http://localhost:8081")
-
+	Agent = *agent.NewAgent(logger)
+	logger.Info("ListenAndServe", zap.String("port", "8081"))
 }

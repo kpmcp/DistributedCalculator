@@ -1,7 +1,7 @@
-package parser
+package ExpParser
 
 import (
-	constants "disCom/internal/env"
+	constants "DistributedCalculator/pkg/env"
 	"errors"
 	"fmt"
 	"regexp"
@@ -26,7 +26,7 @@ func tokenize(str string) []string {
 	return tokens
 }
 
-// ExpressionParser парсер нашего выражения
+
 func ParseExpr(s string) (*Node, error) {
 	var (
 		tokens    = tokenize(s)
@@ -38,16 +38,13 @@ func ParseExpr(s string) (*Node, error) {
 	for _, token := range tokens {
 		switch token {
 		case "+", "-", "*", "/":
-			// если токен - оператор, то
-			// проходимся по циклу операторов для того, чтобы распределить приоритет операторов
-			for len(operators) > 0 && precedence(operators[len(operators)-1]) >= precedence(token) {
+			for len(operators) > 0 && prec(operators[len(operators)-1]) >= prec(token) {
 				err = popOperator(&stack, &operators)
 				if err != nil {
 					return nil, err
 				}
 			}
 			operators = append(operators, token)
-		//если значение - не оператор, то это число
 		default:
 			value, err := strconv.ParseFloat(token, 64)
 			if err != nil {
@@ -56,7 +53,6 @@ func ParseExpr(s string) (*Node, error) {
 			stack = append(stack, &Node{Value: value})
 		}
 	}
-	// закидываем оставшиеся операторы в нод стек
 	for len(operators) > 0 {
 		popOperator(&stack, &operators)
 	}
@@ -68,20 +64,19 @@ func ParseExpr(s string) (*Node, error) {
 	return stack[0], nil
 }
 
-// установливает порядок действий
-func precedence(op string) int {
-	switch op {
-	case "+", "-":
-		return 1
-	case "*", "/":
+func prec(s string) int {
+	if s == "^" {
+		return 3
+	} else if (s == "/") || (s == "*") {
 		return 2
-	default:
-		return 0
+	} else if (s == "+") || (s == "-") {
+		return 1
+	} else {
+		return -1
 	}
 }
 
-// заносит все в нод стек
-// и убирает за собой взятые значения
+
 func popOperator(stack *[]*Node, operators *[]string) error {
 	operator := (*operators)[len(*operators)-1]
 	*operators = (*operators)[:len(*operators)-1]
@@ -101,19 +96,19 @@ func popOperator(stack *[]*Node, operators *[]string) error {
 	return nil
 }
 
-// записывает в мапу субвыражения по порядку выполнения
+
 func EvaluatePostOrder(node *Node, subExpressions *map[int]string, counter *int) error {
 	if node == nil {
 		return nil
 	}
-	// если нод левого выражения не пуст, то и его "парсим"
+
 	if node.Left != nil {
 		err := EvaluatePostOrder(node.Left, subExpressions, counter)
 		if err != nil {
 			return err
 		}
 	}
-	// тут так же, только с правым
+
 	if node.Right != nil {
 		err := EvaluatePostOrder(node.Right, subExpressions, counter)
 		if err != nil {
@@ -121,19 +116,15 @@ func EvaluatePostOrder(node *Node, subExpressions *map[int]string, counter *int)
 		}
 	}
 
-	// если оба уже пустые, то добавляем само значение
 	if node.Left == nil && node.Right == nil {
 		(*subExpressions)[*counter] = fmt.Sprintf("%.2f", node.Value)
 		*counter++
 	}
 
-	// если оператор есть
 	if node.Operator != "" {
-		// то индексируем субвыражения
 		lastIndex := *counter - 1
 		secondLastIndex := lastIndex - 1
 		subExpression := fmt.Sprintf("%s %s %s", (*subExpressions)[secondLastIndex], node.Operator, (*subExpressions)[lastIndex])
-		// сохраняем в мапу наше субвыражение
 		(*subExpressions)[*counter] = subExpression
 		*counter++
 	}
@@ -159,39 +150,36 @@ func ValidatedPostOrder(s string) (map[int]string, error) {
 	return subExps, nil
 }
 
-//Далее функции для вычисления дерева
 
 func CalcNode(node *Node) float64 {
 	if node.Operator == "" {
-
 		return node.Value
 	} else {
 		if node.Left == nil || node.Right == nil {
 		} else {
-			fmt.Println(node.Left, node.Right)
 			return PerformOperation(node.Operator, CalcNode(node.Left), CalcNode(node.Right))
 		}
 	}
 	return 0
 }
 
-// представляет оператор
+
 func PerformOperation(operator string, operand1, operand2 float64) float64 {
 	switch operator {
-	case "+":
-		time.Sleep(time.Duration(constants.Plus) * time.Second)
-		return operand1 + operand2
-	case "-":
-		time.Sleep(time.Duration(constants.Minus) * time.Second)
-		return operand1 - operand2
-	case "*":
-		time.Sleep(time.Duration(constants.Mul) * time.Second)
-		return operand1 * operand2
-	case "/":
-		time.Sleep(time.Duration(constants.Div) * time.Second)
-		return operand1 / operand2
-	default:
-		panic(errors.New("not an operator"))
+		case "+":
+			time.Sleep(time.Duration(constants.Plus) * time.Second)
+			return operand1 + operand2
+		case "-":
+			time.Sleep(time.Duration(constants.Minus) * time.Second)
+			return operand1 - operand2
+		case "*":
+			time.Sleep(time.Duration(constants.Mul) * time.Second)
+			return operand1 * operand2
+		case "/":
+			time.Sleep(time.Duration(constants.Div) * time.Second)
+			return operand1 / operand2
+		default:
+			panic(errors.New("not an operator"))
 	}
 }
 

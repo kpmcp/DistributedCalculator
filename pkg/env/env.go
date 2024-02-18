@@ -14,7 +14,7 @@ var Mul int = 0
 var Div int = 0
 var Workers = 3
 
-func Init() {
+func SetupEnv() {
 	f, _ := os.Open(".env")
 
 	stdinScanner := bufio.NewScanner(f)
