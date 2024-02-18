@@ -15,11 +15,11 @@ import (
 )
 
 var (
-	Waiting []expression.Expression //Здесь лежат выражения, которым не хватило воркеров
+	Waiting []expression.Expression
 	Agent   agent.Agent
 )
 
-func CreateTask(expr expression.Expression) { // Создаёт задание
+func CreateTask(expr expression.Expression) {
 
 	var mu sync.Mutex
 	mu.Lock()
@@ -79,7 +79,7 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 
-func StartServer(logger *zap.Logger) { //запускает горутину с оркестратором
+func StartServer(logger *zap.Logger) {
 	Waiting = make([]expression.Expression, 0)
 	check()
 	go func() {
